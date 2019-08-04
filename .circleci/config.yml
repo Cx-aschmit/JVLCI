@@ -22,9 +22,9 @@ jobs:
 
     steps:
       - checkout
-      #- run:
-       #   name: Make Executable
-       #   command: sudo chmod +x ./CxConsolePlugin-8.80.2/runCxConsole.sh
+      - run:
+          name: Make Executable
+          command: sudo chmod +x ./CxConsolePlugin-8.80.2/runCxConsole.sh
      # - run:
        #   name: GIT
        #   command: sudo apt-get install git
