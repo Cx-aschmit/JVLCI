@@ -43,7 +43,7 @@ jobs:
       - run:
           name: CxSAST Scan
           #command: ./CxConsolePlugin-8.80.2/runCxConsole.sh Scan –v -projectName "CxServer\CircleCI_WebGoat8_2" -CxServer "https://appsecdemo.checkmarx.net" -CxUser "charlie.rice@checkmarx.com" -CxPassword "Cxadmin@1" -Locationtype "GIT" -LocationURL "https://github.com/Cx-aschmit/CircleCI_WebGoat8_2.git" -Preset "Checkmarx Default"
-          command: ./CxConsolePlugin-8.80.2/runCxConsole.sh Scan -v -CxServer "https://appsecdemo.checkmarx.net" -projectName "CxServer\SP\Company\Users\JVLCI" -CxUser charlie.rice@checkmarx.com -CxPassword Cxadmin@1 -Locationtype folder -LocationPath ~/repo -Preset "Checkmarx Default"
+          command: sudo ./CxConsolePlugin-8.80.2/runCxConsole.sh Scan -v -CxServer "https://appsecdemo.checkmarx.net" -projectName "CxServer\SP\Company\Users\JVLCI" -CxUser charlie.rice@checkmarx.com -CxPassword Cxadmin@1 -Locationtype folder -LocationPath ~/repo -Preset "Checkmarx Default"
           #command: ./CxConsolePlugin-8.80.2/runCxConsole.sh Scan -v -CxServer "https://appsecdemo.checkmarx.net" -projectName "CxServer\SP\Company\Users\CircleCITest" -CxUser charlie.rice@checkmarx.com -CxPassword Cxadmin@1 -Locationtype GIT -LocationURL "https://github.com/Cx-aschmit/CircleCI_WebGoat8_2.git" -LocationBranch master -Preset "Checkmarx Default"
       # Download and cache dependencies
       - restore_cache:
