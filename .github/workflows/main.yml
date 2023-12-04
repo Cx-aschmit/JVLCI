@@ -1,45 +1,28 @@
-# This workflow is to automate Checkmarx SAST scans.  It runs on a push to the main branch.
-#
-# The following GitHub Secrets must be first defined:
-#   - CHECKMARX_URL
-#   - CHECKMARX_USER
-#   - CHECKMARX_PASSWORD
-#   - CHECKMARX_CLIENT_SECRET
-#
-# The following variables must be inserted below:
-#   - <ProjectName>
-#
-# Update the 'team' field to reflect the team name used in Checkmarx.
-#
-# For full documentation, including a list of all inputs, please refer to the README https://github.com/checkmarx-ts/checkmarx-cxflow-github-action
-
-name: Checkmarx SAST Scan
-on:
-  push:
-    branches:
-      - main
-      - master
-    
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Checkmarx CxFlow Action
-      uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.4 #Github Action version
-      with:
-        project: ${{ secrets.CHECKMARX_PROJECT }} # <-- Insert Checkmarx SAST Project Name
-        team: ${{ secrets.CHECKMARX_TEAMS }}
-        checkmarx_url: ${{ secrets.CHECKMARX_URL }} # To be stored in GitHub Secrets.
-        checkmarx_username: ${{ secrets.CHECKMARX_USER }} # To be stored in GitHub Secrets.
-        checkmarx_password: ${{ secrets.CHECKMARX_PASSWORD }} # To be stored in GitHub Secrets.
-        checkmarx_client_secret: ${{ secrets.CHECKMARX_CLIENT_SECRET }} # To be stored in GitHub Secrets.
-        break_build: false
-        scanners: sast
-        bug_tracker: Sarif
-        params: --namespace=${{ github.repository_owner }} --checkmarx.settings-override=true --repo-name=${{ github.event.repository.name }} --branch=${{ github.ref_name }} --cx-flow.filterSeverity --cx-flow.filterCategory  --checkmarx.disable-clubbing=true
-    - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: cx.sarif
+            - name: Checkmarx AST Github Action
+  # You may pin to the exact commit or the version.
+  # uses: Checkmarx/ast-github-action@72d549beebd0bc5bbafa559f198161b6ce7c03df
+  uses: Checkmarx/ast-github-action@2.0.21
+  with:
+    # Provide the AST portal URL
+    base_uri: https://ast.checkmarx.net
+    # Provide the Tenant for AST portal URL
+    cx_tenant: dp_wp_na
+    # Client ID for AST portal authentication
+    cx_client_id: GH_Actions_AS
+    # Secret key for AST portal authentication
+    cx_client_secret: VV7JUqwVofJh8PejiOqH9EkDbMXIFpMX
+    # Select a Checkmarx Project Name
+    project_name: # optional, default is ${{ github.repository }}
+    # Branch name
+    branch: # optional, default is ${{ github.head_ref || github.ref }}
+    # GitHub API Token
+    github_token: # optional, default is ${{ github.token }}
+    # Additional parameters for AST scan
+    additional_params: # optional, default is 
+    # Repository name for PR decoration
+    repo_name: # optional, default is ${{ github.event.repository.name }}
+    # Organization name to create the Pr comment
+    namespace: # optional, default is ${{ github.repository_owner }}
+    # Pr Number of the pull request that needs the decoration
+    pr_number: # optional, default is ${{ github.event.number }}
+          
