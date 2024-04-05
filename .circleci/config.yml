@@ -1,0 +1,62 @@
+# Java Maven CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+
+    steps:
+      - checkout
+      - run:
+          name: Make Executable
+          command: sudo chmod +x ./CxConsolePlugin-8.90.1/runCxConsole.sh
+     # - run:
+       #   name: GIT
+       #   command: sudo apt-get install git
+     # - run:
+       #   name: make directory
+       #   command: sudo mkdir /home/circleci/repo/scan1
+     # - run:
+       #   name: Move to Directory
+       #   command: cd /home/circleci/repo/scan1
+     # - run:
+       #   name: GIT clone
+       #   command: sudo git clone https://github.com/Cx-aschmit/CircleCI_WebGoat8_2.git
+     # - run:
+      #    name: list directory
+       #   command: cd /home/ | ls
+      - run:
+          name: CxSAST Scan
+          #command: ./CxConsolePlugin-8.80.2/runCxConsole.sh Scan –v -projectName "CxServer\CircleCI_WebGoat8_2" -CxServer "https://appsecdemo.checkmarx.net" -CxUser "charlie.rice@checkmarx.com" -CxPassword "Cxadmin@1" -Locationtype "GIT" -LocationURL "https://github.com/Cx-aschmit/CircleCI_WebGoat8_2.git" -Preset "Checkmarx Default"
+          command: sudo ./CxConsolePlugin-8.90.1/runCxConsole.sh Scan -v -CxServer "https://appsecdemo.checkmarx.net" -projectName "CxServer\SP\Company\Users\JVLCI" -CxUser charlie.rice@checkmarx.com -CxPassword Cxadmin@1 -Locationtype folder -LocationPath ~/repo -Preset "Checkmarx Default"
+          #command: ./CxConsolePlugin-8.80.2/runCxConsole.sh Scan -v -CxServer "https://appsecdemo.checkmarx.net" -projectName "CxServer\SP\Company\Users\CircleCITest" -CxUser charlie.rice@checkmarx.com -CxPassword Cxadmin@1 -Locationtype GIT -LocationURL "https://github.com/Cx-aschmit/CircleCI_WebGoat8_2.git" -LocationBranch master -Preset "Checkmarx Default"
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+
+      # run tests!
